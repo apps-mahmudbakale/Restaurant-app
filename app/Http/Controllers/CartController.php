@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Payment;
+use App\Models\Que;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
@@ -244,6 +246,78 @@ public function saveCartPrint(Request $request)
                     'data' => $data,
                     'sum' => $sum
         ]);
+    }
+
+
+    public function PayInvoice($invoice)
+    {
+        $sum = Order::where('invoice_no', $invoice)->sum('amount');
+        $words = new \NumberFormatter("En", \NumberFormatter::SPELLOUT);
+        return view('payment.create',['invoice' => $invoice, 'sum' =>$sum, 'words' => $words->format($sum)]);
+    
+    }
+
+    public function getPayments(Request $request)
+    {
+        $payments = Payment::latest()->paginate(10);
+        $sum = Payment::sum('amount');
+        $words = new \NumberFormatter("En", \NumberFormatter::SPELLOUT);
+        return view('payment.index',['payments' => $payments,'sum'=> $sum, 'words' => $words->format($sum)]);
+    }
+
+
+    public function storePayment(Request $request)
+    {
+        $order = Order::find($request->invoice);
+
+        if ($order->customer == 0) {
+            $customer = 0;
+        }else{
+            $customer = $order->customer->id;
+        }
+
+        $query = Payment::updateOrInsert(
+            ['invoice_no' => $request->invoice],
+            [
+            'amount' => $request->amount,
+            'invoice_no' => $request->invoice,
+            'user_id' => $order->user->id,
+            'customer_id' => $customer
+        ]);
+        $max = Que::max('id');
+        $que = str_pad($max +1, 4, '0', STR_PAD_LEFT);
+        Que::updateOrInsert(
+            ['invoice_no' => $request->invoice],
+            [
+            'customer_id' => $customer,
+            'invoice_no' => $request->invoice,
+            'user_id' => $order->user->id,
+            'que_no' => $que
+        ]);
+        \DB::table('orders')->where('invoice_no', $request->invoice)->update(['payment'=> 1]);
+
+            if (!$query) {
+                return redirect()->back()->with('error', 'Sorry, there\'re a problem while Submitting Payment.');
+            }
+            return view('payment.receipt', [
+                'invoice' => $request->invoice,
+                'amount' => $request->amount,
+                'customer' => $order->getCustomerName(),
+                'user' => $order->user->getFullname(),
+                'que' => $que
+            ]);
+        
+    }
+
+    public function Reports(Request $request)
+    {
+        dd('reports');
+    }
+
+
+    public function Ques(Request $request)
+    {
+        dd('Ques');
     }
 	
 }

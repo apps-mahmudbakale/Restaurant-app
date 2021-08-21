@@ -29,7 +29,7 @@
                         @if($order->payment == 0)
                          <span class="badge badge-danger">Not Paid</span>
                          @else
-                         <span class="badge badge-danger">Not Paid</span>
+                         <span class="badge badge-success">Paid</span>
                          @endif
                     </td>
                     <td>{{$order->created_at}}</td>

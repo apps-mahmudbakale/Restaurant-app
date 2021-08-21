@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Que extends Model
 {
+    use HasFactory;
     protected $fillable = [
-        'amount',
-        'invoice_no',
+        'customer_id',
         'user_id',
-        'customer_id'
+        'invoice_no',
+        'que_no'
     ];
 
 
@@ -34,4 +36,8 @@ class Payment extends Model
         return 'WalkIn Customer';
     }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

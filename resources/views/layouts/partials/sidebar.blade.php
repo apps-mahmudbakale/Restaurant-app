@@ -79,7 +79,19 @@
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="" class="nav-link {{ activeSegment('reports') }}">
+                    <a href="{{route('payments')}}" class="nav-link {{ activeSegment('payments') }}">
+                        <i class="nav-icon fas fa-money-bill"></i>
+                        <p>Payments</p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('order.ques')}}" class="nav-link {{ activeSegment('ques') }}">
+                        <i class="nav-icon fas fa-cubes"></i>
+                        <p>Ques</p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('reports')}}" class="nav-link {{ activeSegment('reports') }}">
                         <i class="nav-icon fas fa-calendar"></i>
                         <p>Report</p>
                     </a>

@@ -100,7 +100,7 @@
               <!-- this row will not appear when printing -->
               <div class="row no-print">
                 <div class="col-12">
-                  <a href="/payment/add/{{$invoice}}" class="btn btn-success float-right"><i class="fa fa-credit-card"></i> Submit
+                  <a href="{{route('invoice.pay', $invoice)}}" class="btn btn-success float-right"><i class="fa fa-credit-card"></i> Submit
                     Payment
                   </a>
                   <button class="btn btn-default float-right" onclick="window.print()"><i class="fas fa-print"></i> Print</button>

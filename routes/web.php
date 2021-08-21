@@ -42,5 +42,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/cart/plus', [CartController::class, 'plus']);
     Route::post('/cart/minus', [CartController::class, 'minus']);
     Route::get('/cart/invoice/{invoice}', [CartController::class, 'getInvoice']);
-    Route::get('/payment/add/{invoice}', [OrderController::class, 'addPayment']);
+    Route::get('/cart/payment/{invoice}', [CartController::class, 'PayInvoice'])->name('invoice.pay');
+    Route::get('/cart/payments', [CartController::class, 'getPayments'])->name('payments');
+    Route::post('/cart/savePayments', [CartController::class, 'storePayment'])->name('store.payment');
+    Route::get('/cart/Reports', [CartController::class, 'Reports'])->name('reports');
+    Route::get('/cart/Ques', [CartController::class, 'Ques'])->name('order.ques');
 });
